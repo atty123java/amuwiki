@@ -1,0 +1,659 @@
+[Untitled-1.html](https://github.com/user-attachments/files/28960522/Untitled-1.html)
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BJ쇼부 - 나무위키</title>
+    <style>
+        /* 기본 설정 */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        html {
+            scroll-behavior: smooth;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", "Apple SD Gothic Neo", "Malgun Gothic", Dotum, sans-serif;
+            background-color: #ffffff;
+            color: #373a3c;
+            font-size: 14.5px;
+            line-height: 1.6;
+        }
+
+        /* 링크 스타일 */
+        a {
+            color: #0275d8;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+
+        /* 상단 네비게이션 바 (나무위키 스타일) */
+        .wiki-nav {
+            background-color: #373a3c;
+            color: #fff;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 14px;
+        }
+        .wiki-logo {
+            font-weight: bold;
+            color: #fff;
+        }
+        .wiki-logo span {
+            color: #4ac36c; /* 나무위키 초록색 포인트 */
+        }
+        .nav-edit {
+            cursor: pointer;
+        }
+        .nav-edit:hover {
+            text-decoration: underline;
+        }
+
+        /* 메인 컨테이너 */
+        .wiki-wrapper {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            display: flex;
+            gap: 20px;
+        }
+
+        /* 본문 영역 */
+        .wiki-article {
+            flex: 1;
+            min-width: 0;
+        }
+
+        /* 문서 제목 */
+        .article-title {
+            font-size: 32px;
+            font-weight: normal;
+            border-bottom: 2px solid #373a3c;
+            padding-bottom: 8px;
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+        }
+        .btn-edit {
+            font-size: 13px;
+            background-color: #eceeef;
+            color: #373a3c;
+            border: 1px solid #ccc;
+            padding: 4px 8px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        /* 분류 상자 (상단/하단) */
+        .wiki-category {
+            border: 1px solid #ccc;
+            background-color: #f5f5f5;
+            padding: 8px 12px;
+            margin-bottom: 15px;
+            font-size: 13px;
+        }
+
+        /* 스포일러 틀 */
+        .spoiler-box {
+            border: 1px solid #ddd;
+            border-top: 4px solid #f0ad4e;
+            padding: 15px;
+            margin-bottom: 20px;
+            background-color: #fff;
+        }
+        .spoiler-title {
+            font-weight: bold;
+            font-size: 15px;
+            margin-bottom: 5px;
+        }
+
+        /* 접기/펼치기 틀 */
+        .wiki-folding {
+            margin-bottom: 12px;
+            border: 1px solid #1b1b1b;
+        }
+        .folding-header {
+            background-color: #1b1b1b;
+            color: #f7e600; /* 노란색 글씨 */
+            padding: 8px;
+            text-align: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+        }
+        details summary {
+            background-color: #000000;
+            color: #fff;
+            padding: 6px;
+            text-align: center;
+            font-size: 13px;
+            cursor: pointer;
+            list-style: none;
+            border-top: 1px solid #333;
+        }
+        details summary::-webkit-details-marker { display: none; }
+        .folding-content {
+            padding: 12px;
+            background-color: #f9f9f9;
+            font-size: 13.5px;
+            border-top: 1px solid #ddd;
+        }
+        .folding-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 12px;
+            background-color: #111;
+            color: #fff;
+            font-size: 13px;
+        }
+        .folding-table th,
+        .folding-table td {
+            border: 1px solid #333;
+            padding: 8px 10px;
+            text-align: center;
+            vertical-align: middle;
+        }
+        .folding-table th {
+            background-color: #000;
+            color: #f7e600;
+            font-weight: bold;
+        }
+        .folding-table td {
+            background-color: #111;
+        }
+        .folding-table tr:nth-child(odd) td {
+            background-color: #141414;
+        }
+
+        /* 인포박스 (우측 프로필 표) */
+        .infobox {
+            width: 100%;
+            max-width: 340px;
+            border: 1px solid #000;
+            border-collapse: collapse;
+            float: right;
+            margin-left: 20px;
+            margin-bottom: 20px;
+            font-size: 13px;
+        }
+        .infobox th.main-title {
+            background-color: #000000;
+            color: #ffffff;
+            padding: 10px;
+            text-align: center;
+        }
+        .infobox .char-name { font-size: 18px; font-weight: bold; }
+        .infobox .char-sub { color: #ccc; font-size: 12px; margin-top: 3px; }
+        .infobox .image-slot {
+            background-color: #fff;
+            text-align: center;
+            padding: 0;
+            min-height: 5cm;
+        }
+        .infobox .image-slot img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+        .infobox .image-placeholder {
+            width: 100%;
+            height: 100%;
+            border: 1px dashed #aaa;
+            background-color: #f8f8f8;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #666;
+            font-size: 13px;
+            cursor: pointer;
+            text-align: center;
+            padding: 10px;
+            box-sizing: border-box;
+        }
+        .infobox .image-placeholder:hover {
+            border-color: #373a3c;
+            color: #373a3c;
+        }
+        .infobox th.section-title {
+            background-color: #373a3c;
+            color: #fff;
+            padding: 5px;
+            text-align: center;
+            font-weight: bold;
+        }
+        .infobox th.label {
+            background-color: #1b1b1b;
+            color: #fff;
+            width: 35%;
+            padding: 7px 10px;
+            text-align: left;
+            font-weight: bold;
+            border: 1px solid #373a3c;
+        }
+        .infobox td.content {
+            padding: 7px 10px;
+            background-color: #ffffff;
+            border: 1px solid #373a3c;
+        }
+
+        /* 본문 텍스트 및 문단 */
+        .article-body h2 {
+            font-size: 20px;
+            font-weight: bold;
+            border-bottom: 1px solid #ccc;
+            padding-bottom: 5px;
+            margin-top: 30px;
+            margin-bottom: 10px;
+        }
+        .article-body p {
+            margin-bottom: 12px;
+            text-align: justify;
+        }
+        .quote-box {
+            background-color: #f9f9f9;
+            border-left: 3px solid #373a3c;
+            padding: 12px 15px;
+            margin: 15px 0;
+            font-size: 14px;
+        }
+        .wiki-ul {
+            padding-left: 25px;
+            margin-bottom: 15px;
+        }
+        .wiki-ul li {
+            margin-bottom: 6px;
+        }
+
+        /* 목차 박스 */
+        .toc-box {
+            display: inline-block;
+            border: 1px solid #ccc;
+            background-color: #f9f9f9;
+            padding: 15px;
+            margin: 15px 0;
+            min-width: 200px;
+        }
+        .toc-title {
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 8px;
+        }
+        .toc-list {
+            list-style: none;
+            font-size: 13.5px;
+        }
+        .toc-list ul {
+            list-style: none;
+            margin: 0;
+            padding-left: 12px;
+        }
+        .toc-list li { margin-bottom: 4px; }
+
+        /* 반응형 (모바일 화면 레이아웃 조절) */
+        @media (max-width: 768px) {
+            .wiki-wrapper { flex-direction: column; padding: 10px; }
+            .infobox { float: none; width: 100%; max-width: 100%; margin-left: 0; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="wiki-nav">
+    <div class="wiki-logo">namu<span>.wiki</span></div>
+    <div>
+        최근 변경 / 토론 / <span class="nav-edit">편집</span>
+    </div>
+</div>
+
+<div class="wiki-wrapper">
+    <div class="wiki-article">
+        
+        <div class="wiki-category">
+            <strong>분류:</strong> <a href="https://namu.wiki/w/%EB%B6%84%EB%A5%98:%EC%99%B8%EB%AA%A8%EC%A7%80%EC%83%81%EC%A3%BC%EC%9D%98(%EC%9B%B9%ED%88%B0)/%EB%93%B1%EC%9E%A5%EC%9D%B8%EB%AC%BC">외모지상주의(웹툰)/등장인물</a> | <a href="https://namu.wiki/w/%EB%B6%84%EB%A5%98:%EB%B0%95%ED%83%9C%EC%A4%80%20%EC%9C%A0%EB%8B%88%EB%B2%84%EC%8A%A4/%ED%97%A4%EB%93%9C">박태준 유니버스/헤드</a>
+        </div>
+
+        <h1 class="article-title">
+            BJ쇼부
+            <button type="button" class="btn-edit">편집</button>
+        </h1>
+
+        <div class="spoiler-box">
+            <div class="spoiler-title">이 문서에 <a href="#">스포일러</a>가 포함되어 있습니다.</div>
+            <div>이 문서가 설명하는 작품이나 인물 등에 대한 줄거리, 결말, 반전 요소 등을 직·간접적으로 포함하고 있습니다.</div>
+        </div>
+
+        <div class="wiki-folding">
+            <div class="folding-header">1세대의 왕</div>
+            <details>
+                <summary>[ 펼치기 · 접기 ]</summary>
+                <div class="folding-content">
+                    <table class="folding-table">
+                        <thead>
+                            <tr>
+                                <th>지역</th>
+                                <th>지역의 왕</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>서울</td>
+                                <td>서울 백사 곽지창 ↓ 왕 시해자 김기태</td>
+                            </tr>
+                            <tr>
+                                <td>안산</td>
+                                <td>극한의 권 마태수</td>
+                            </tr>
+                            <tr>
+                                <td>대구</td>
+                                <td>금성탕지 지공섭</td>
+                            </tr>
+                            <tr>
+                                <td>수원</td>
+                                <td>왕석두</td>
+                            </tr>
+                            <tr>
+                                <td>충청</td>
+                                <td>??? ↓ 백사 곽지창</td>
+                            </tr>
+                            <tr>
+                                <td>평택</td>
+                                <td>허독수</td>
+                            </tr>
+                            <tr>
+                                <td>성남</td>
+                                <td>고진용</td>
+                            </tr>
+                            <tr>
+                                <td>인천</td>
+                                <td>하유강 ↓ 반쪽짜리 왕 나재견 / 선유재 ↓ 나재견</td>
+                            </tr>
+                            <tr>
+                                <td>천량</td>
+                                <td>육왕 육성지</td>
+                            </tr>
+                            <tr>
+                                <td>부산</td>
+                                <td>늑대 진랑</td>
+                            </tr>
+                            <tr>
+                                <td>삼척</td>
+                                <td>장무건</td>
+                            </tr>
+                            <tr>
+                                <td>용인</td>
+                                <td>함승우</td>
+                            </tr>
+                            <tr>
+                                <td>파주</td>
+                                <td>최시헌</td>
+                            </tr>
+                            <tr>
+                                <td>포항</td>
+                                <td>장무석</td>
+                            </tr>
+                            <tr>
+                                <td>부천</td>
+                                <td>BJ쇼부</td>
+                            </tr>
+                            <tr>
+                                <td>의정부</td>
+                                <td>예술가 은주혁</td>
+                            </tr>
+                            <tr>
+                                <td>대전</td>
+                                <td>노재민</td>
+                            </tr>
+                            <tr>
+                                <td>전라도</td>
+                                <td>백오 오창수</td>
+                            </tr>
+                            <tr>
+                                <td>전주</td>
+                                <td>강칠수</td>
+                            </tr>
+                            <tr>
+                                <td>순천</td>
+                                <td>진영진</td>
+                            </tr>
+                            <tr>
+                                <td>신안</td>
+                                <td>배동춘</td>
+                            </tr>
+                            <tr>
+                                <td>벌교</td>
+                                <td>서창이</td>
+                            </tr>
+                            <tr>
+                                <td>통영</td>
+                                <td>원해식</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </details>
+        </div>
+
+        <div class="wiki-folding">
+            <div class="folding-header">김기명 연합</div>
+            <details>
+                <summary>[ 펼치기 · 접기 ]</summary>
+                <div class="folding-content">
+                    <table class="folding-table">
+                        <thead>
+                            <tr>
+                                <th colspan="4">수뇌부</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td colspan="2">김기명의 아들<br><strong>김기명</strong></td>
+                                <td colspan="2">결착<br><strong>박형석</strong><br><small>(분리의 육체 ↔ 새로운 육체)</small></td>
+                            </tr>
+                            <tr>
+                                <th colspan="4">빅딜</th>
+                            </tr>
+                            <tr>
+                                <td colspan="4">잠룡<br><strong>라인만</strong></td>
+                            </tr>
+                            <tr>
+                                <th>안산</th>
+                                <th>대구</th>
+                                <th>수원</th>
+                                <th>부산</th>
+                            </tr>
+                            <tr>
+                                <td>안산의 왕<br><strong>마태수</strong></td>
+                                <td>대구의 왕<br><strong>지공섭</strong></td>
+                                <td>수원의 왕<br><strong>왕석두</strong></td>
+                                <td>부산의 왕<br><strong>진랑</strong></td>
+                            </tr>
+                            <tr>
+                                <th colspan="4">인천</th>
+                            </tr>
+                            <tr>
+                                <td>No.1<br><strong>나재견</strong></td>
+                                <td>No.2<br><strong>권로이</strong></td>
+                                <td>No.2<br><strong>제갈성</strong></td>
+                                <td>No.3<br><strong>하여울</strong></td>
+                            </tr>
+                            <tr>
+                                <td>No.4<br><strong>이북남</strong></td>
+                                <td>No.5<br><strong>강세바스찬</strong></td>
+                                <td colspan="2"></td>
+                            </tr>
+                            <tr>
+                                <td colspan="2">부천의 왕<br><strong>BJ쇼부</strong></td>
+                                <td>의정부의 왕<br><strong>은주혁</strong></td>
+                                <td>대전의 왕<br><strong>노재민</strong></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </details>
+        </div>
+
+        <input type="file" id="imageInput" accept="image/*" style="display:none">
+        <table class="infobox">
+            <tr>
+                <th class="main-title" colspan="2">
+                    <div class="char-name">BJ쇼부<sup>[1]</sup></div>
+                    <div class="char-sub">バトル | BJ Shoubu</div>
+                </th>
+            </tr>
+            <tr>
+                <td class="image-slot" colspan="10">
+                    <div class="image-placeholder">이미지 삽입<br>(5cm × 5cm)</div>
+                </td>
+            </tr>
+            <tr>
+                <th class="label">이명</th>
+                <td class="content"><strong>부천의 왕</strong></td>
+            </tr>
+            <tr>
+                <th class="label">소속</th>
+                <td class="content">부천 크루 (No.1)</td>
+            </tr>
+            <tr>
+                <th class="label">직업</th>
+                <td class="content">인터넷 방송 BJ (스트리머)</td>
+            </tr>
+            <tr>
+                <th class="label">격투 스타일</th>
+                <td class="content">탄성 레슬링 (Grappling)</td>
+            </tr>
+        </table>
+
+        <div class="article-body">
+            <div class="quote-box">
+                "이 왼쪽 어깨는 그 상대를 만난 결과물이다. 부천, 레슬링이다."<br>
+                <small>— 외모지상주의 1세대 에피소드 中, 마태수의 독백</small>
+            </div>
+
+            <div class="toc-box">
+                <div class="toc-title">목차</div>
+                <ul class="toc-list">
+                    <li><a href="#sec-1">1. 개요</a></li>
+                    <li>
+                        <a href="#sec-2">2. 작중 행적</a>
+                        <ul>
+                            <li><a href="#sec-2-1">2.1 인천</a></li>
+                            <li><a href="#sec-2-2">2.2 전쟁, 개막</a></li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="#sec-3">3. 전투력</a>
+                        <ul>
+                            <li><a href="#sec-3-1">3.1 전적</a></li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="#sec-4">4. 인간 관계</a>
+                        <ul>
+                            <li><a href="#sec-4-1">4.1 1세대</a></li>
+                            <li><a href="#sec-4-2">4.2 2세대</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="#sec-5">5. 어록</a></li>
+                    <li><a href="#sec-6">6. 기타</a></li>
+                </ul>
+            </div>
+
+            <h2 id="sec-1">1. 개요</h2>
+            <p>네이버 웹툰 《<a href="#">외모지상주의</a>》의등장인물. <strong>1세대 부천의 왕</strong>이다.</p>
+            <p>BJ라는 독특한 컨셉을 가진 인물로, 인터넷 방송을 통해 스트리트 파이트나 자극적인 콘텐츠를 중계하는 것으로 추정된다. 이름인 '쇼부'는 일본어로 勝負(승부)를 뜻하는 은어에서 따온 활동명이다.</p>
+
+            <h2 id="sec-2">2. 작중 행적</h2>
+            <p>1세대 왕들이 집결하는 에피소드에서 인천의 나재견을 지원하기 위해 은주혁, 노재민 등과 함께 모습을 드러낸다. 이지훈에게 당했던 과거의 상흔으로 인해 다리를 저는 패널티를 안고 있으나 기술력으로 이를 극복하는 모습을 보여준다.</p>
+
+            <h3 id="sec-2-1">2.1 인천</h3>
+            <p>인천 편은 558화부터 581화까지 전개되며, 나재견과 부천 세력이 중심이 되어 움직인다. 쇼부는 이 시기 주요 전투에서 존재감을 드러내며 상황을 주도한다.</p>
+
+            <h3 id="sec-2-2">2.2 전쟁, 개막</h3>
+            <p>583화부터 587화에서는 전쟁이 본격적으로 개막되는 흐름이 펼쳐진다. 각 세대와 세력이 충돌하며 쇼부의 역할이 더욱 중요해진다.</p>
+
+            <h2 id="sec-3">3. 전투력</h2>
+            <p>BJ쇼부는 그래플링과 몸 싸움에 능하며, 특유의 탄성 레슬링 스타일로 상대를 제압한다. 노련한 기술과 높은 근지구력을 바탕으로 전장에서 유리한 위치를 점한다.</p>
+            <h3 id="sec-3-1">3.1 전적</h3>
+            <p>전적은 공식적으로 정리되어 있지 않지만, 주요 전투에서 보여준 활약으로 인해 강력한 전투력으로 평가받는다. 특히 부천 세력과의 싸움에서 탁월한 지휘력과 전투 능력을 발휘했다.</p>
+
+            <h2 id="sec-4">4. 인간 관계</h2>
+            <p>쇼부는 1세대와 2세대 인물 모두와 복잡한 관계를 맺고 있다. 동맹과 갈등이 교차하는 가운데 중심인물로서 존재감을 유지한다.</p>
+            <h3 id="sec-4-1">4.1 1세대</h3>
+            <p>1세대 인물들과의 관계에서는 주로 부천 세력과 협력하거나 경쟁하는 모습이 나온다. 쇼부의 과거 인연과 전투 스타일이 이를 정의한다.</p>
+            <h3 id="sec-4-2">4.2 2세대</h3>
+            <p>2세대와의 관계에서는 세대 간 갈등과 연대가 혼재한다. 쇼부는 자신의 위치를 지키면서도 세대 교체의 흐름을 관찰하고 대응한다.</p>
+
+            <h2 id="sec-5">5. 어록</h2>
+            <p>쇼부의 어록은 그의 성격과 전투 철학을 드러낸다. 짧고 강렬한 말투로 현장의 분위기를 압도하는 스타일이다.</p>
+
+            <h2 id="sec-6">6. 기타</h2>
+            <p>기타 항목에는 쇼부의 외모, 비밀, 문화적 요소 등이 포함될 수 있다. 이 문서는 이후 추가 수정으로 확장될 수 있다.</p>
+        </div>
+
+    </div>
+</div>
+
+    <script>
+        const editBtn = document.querySelector('.btn-edit');
+        const navEdit = document.querySelector('.nav-edit');
+        const articleArea = document.querySelector('.wiki-article');
+        const imageSlot = document.querySelector('.image-slot');
+        const imageInput = document.getElementById('imageInput');
+
+        function toggleEditMode() {
+            const isEditing = articleArea.isContentEditable;
+            articleArea.contentEditable = !isEditing;
+            editBtn.textContent = isEditing ? '편집' : '저장';
+            if (!isEditing) {
+                articleArea.focus();
+            }
+        }
+
+        function insertImage(url) {
+            if (!url) return;
+            imageSlot.innerHTML = `<img src="${url}" alt="BJ쇼부 이미지">`;
+        }
+
+        editBtn.addEventListener('click', toggleEditMode);
+        navEdit.addEventListener('click', toggleEditMode);
+
+        document.querySelectorAll('.toc-list a').forEach((anchor) => {
+            anchor.addEventListener('click', (event) => {
+                event.preventDefault();
+                const targetId = anchor.getAttribute('href').slice(1);
+                const target = document.getElementById(targetId);
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+
+        imageSlot.addEventListener('click', (event) => {
+            const isEditing = articleArea.isContentEditable;
+            if (!isEditing) return;
+            imageInput.click();
+            event.stopPropagation();
+        });
+
+        imageInput.addEventListener('change', (event) => {
+            const file = event.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = () => insertImage(reader.result);
+            reader.readAsDataURL(file);
+            imageInput.value = '';
+        });
+    </script>
+
+</body>
+</html>
